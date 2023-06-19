@@ -9,6 +9,7 @@ import NotFound from './pages/notFound';
 import MoviesPage from './pages/movies';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/register';
+import AddNewMovie from './movies_Cart/components/addNewMovie';
 
 
 export default function App() {
@@ -20,7 +21,7 @@ export default function App() {
         <Routes>
             <Route path="/" element={<IndexMovies/>}/>
             <Route path="/movies/:id" element={<MoviesPage/>}/>
-
+            <Route path="/addNewMovie" element={<AddNewMovie/>}/>
             <Route path="/Customers" element={<Customers/>}/>
             <Route path="/Rentals" element={<Rentals/>}/>
             <Route path="/Login" element={<Login/>}/>

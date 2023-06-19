@@ -7,6 +7,7 @@ import { getGenres } from './services/fakeGenreService';
 import ListGroup from './components/listGroup';
 import listgroupUtils from './utils/listgroupUtils';
 import { Heads } from './components/Heads';
+import { useNavigate } from 'react-router-dom';
 
 export default function MainMovies() {
     const cmovies =getMovies();
@@ -74,6 +75,8 @@ export default function MainMovies() {
     }
    }
 
+   const navigateTo = useNavigate();
+
 
 
 
@@ -82,6 +85,7 @@ export default function MainMovies() {
 
 
     {Heads(movies, totalMovies, wishList)}
+  <button className='btn btn-primary' onClick={()=>{navigateTo("/addNewMovie")}}>New Movie</button>
     
 
   <div className="d-flex justify-content-start">
