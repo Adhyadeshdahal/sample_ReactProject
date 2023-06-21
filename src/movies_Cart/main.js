@@ -1,4 +1,4 @@
-import React, { createContext, useEffect, useState } from 'react';
+import React, {useRef, useState } from 'react';
 import { deleteMovie, getMovie, getMovies } from './services/fakeMovieServices';
 import Pagnition from './components/pagnition';
 import pagnitionUtils from './utils/pagnitionUtils';
@@ -7,12 +7,14 @@ import { getGenres } from './services/fakeGenreService';
 import ListGroup from './components/listGroup';
 import listgroupUtils from './utils/listgroupUtils';
 import { Heads } from './components/Heads';
+import { useNavigate } from 'react-router-dom';
 
 
 
 export default function MainMovies() {
-    const cmovies =getMovies();
-    const ogenres= getGenres();
+    const navigateTo = useNavigate();
+    const [cmovies,setCMovies] = useState(getMovies());
+    const [ogenres,setOGenres]= useState(getGenres());
     let noOfItemsPerPage =4;
     const [fromPagnitionUtils,setfromPagnitionUtils] = useState(pagnitionUtils(cmovies,noOfItemsPerPage));
     let [movies,setMovies]=useState(fromPagnitionUtils.refactoredItems);
@@ -20,6 +22,24 @@ export default function MainMovies() {
     let [currentPage,setCurrentPage]=useState(1);
     let [totalMovies,setTotalMovies]=useState(cmovies.length);
     let [selectedGenre,setSelectedGenre]=useState(null);
+    const searchedValue = useRef("");
+
+    function searchMovies() {
+      const filteredMovies= cmovies.filter(movie => {return movie.title.toLowerCase().startsWith(searchedValue.current)}).sort((a, b) => a.title.localeCompare(b.title));
+      setMovies (filteredMovies);
+
+      
+    }
+
+
+    function handleChange(event){
+      setSelectedGenre(null);
+      searchedValue.current = event.currentTarget.value.toLowerCase();
+      searchMovies();
+      console.log(searchedValue.current);
+
+
+    }
 
     const handleListGroupClick=(id)=>{
       if(id){
@@ -86,10 +106,10 @@ export default function MainMovies() {
 
     {Heads(movies, totalMovies, wishList)}
     
-    
+    <input type="search" name="search" placeholder='Search...' onChange ={handleChange}/>
+  <div className='m-3'>
 
   <div className="d-flex justify-content-start">
-  <div className='m-3'>
     <ListGroup genres={ogenres} forClick={handleListGroupClick} selectGenre={selectedGenre}/>
 </div>
 <br/>
