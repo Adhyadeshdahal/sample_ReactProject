@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { createContext, useEffect, useState } from 'react';
 import { deleteMovie, getMovie, getMovies } from './services/fakeMovieServices';
 import Pagnition from './components/pagnition';
 import pagnitionUtils from './utils/pagnitionUtils';
@@ -7,7 +7,8 @@ import { getGenres } from './services/fakeGenreService';
 import ListGroup from './components/listGroup';
 import listgroupUtils from './utils/listgroupUtils';
 import { Heads } from './components/Heads';
-import { useNavigate } from 'react-router-dom';
+
+
 
 export default function MainMovies() {
     const cmovies =getMovies();
@@ -75,7 +76,6 @@ export default function MainMovies() {
     }
    }
 
-   const navigateTo = useNavigate();
 
 
 
@@ -85,7 +85,7 @@ export default function MainMovies() {
 
 
     {Heads(movies, totalMovies, wishList)}
-  <button className='btn btn-primary' onClick={()=>{navigateTo("/addNewMovie")}}>New Movie</button>
+    
     
 
   <div className="d-flex justify-content-start">
@@ -95,6 +95,11 @@ export default function MainMovies() {
 <br/>
   <div className='w-75 m-3'>
     <ComponentCpy onLiked={handleLike} handleClick={handleDelete} movies={movies}/>
+
+    <button className='btn btn-primary' onClick={()=>{navigateTo("/addNewMovie")}}>New Movie</button>
+    
+    
+
   </div>
    </div>
     
