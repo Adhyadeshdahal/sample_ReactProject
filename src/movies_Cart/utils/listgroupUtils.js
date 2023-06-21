@@ -6,7 +6,7 @@ export default function listgroupUtils(items,genreId) {
     }
   return (
     {
-        refactoredItems:itemsRefactor(),
+        refactoredItems:itemsRefactor().sort((a, b) => a['title'].localeCompare(b['title'])),
 
     }
     

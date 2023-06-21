@@ -9,7 +9,7 @@ import NotFound from './pages/notFound';
 import MoviesPage from './pages/movies';
 import Login from './pages/Login/Login';
 import Register from './pages/Register/register';
-import AddNewMovie from './movies_Cart/components/addNewMovie';
+import AddNewMovie from './pages/addNewMovie';
 
 
 export default function App() {

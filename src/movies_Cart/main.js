@@ -24,8 +24,22 @@ export default function MainMovies() {
     let [selectedGenre,setSelectedGenre]=useState(null);
     const searchedValue = useRef("");
 
+    function sortMovies(type) {
+      var sortedMovies ;
+      if (type==="title"){
+        sortedMovies =[...movies].sort((a, b) => a[type].localeCompare(b[type]));
+      }else if (type === "numberInStock"){
+        sortedMovies = [...movies].sort((a, b) => a[type]-b[type]);
+      }
+      
+      setMovies(sortedMovies);
+      console.log(sortedMovies);
+    }
+    
+
     function searchMovies() {
-      const filteredMovies= cmovies.filter(movie => {return movie.title.toLowerCase().startsWith(searchedValue.current)}).sort((a, b) => a.title.localeCompare(b.title));
+      const filteredMovies= cmovies.filter(movie => {return movie.title.toLowerCase().includes(searchedValue.current)}).
+      sort((a, b) => a.title.localeCompare(b.title));
       setMovies (filteredMovies);
 
       
@@ -114,7 +128,7 @@ export default function MainMovies() {
 </div>
 <br/>
   <div className='w-75 m-3'>
-    <ComponentCpy onLiked={handleLike} handleClick={handleDelete} movies={movies}/>
+    <ComponentCpy onLiked={handleLike} handleClick={handleDelete} movies={movies} forSort ={sortMovies}/>
 
     <button className='btn btn-primary' onClick={()=>{navigateTo("/addNewMovie")}}>New Movie</button>
     

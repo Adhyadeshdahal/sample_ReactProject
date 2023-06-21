@@ -69,7 +69,7 @@ const movies = [
 ];
 
 export function getMovies() {
-  return movies;
+  return movies.sort((a, b) => a.title.localeCompare(b.title));
 }
 
 export function getMovie(id) {

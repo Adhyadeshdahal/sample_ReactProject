@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect } from 'react'
 
 export default function Register_Component({forFields,forChange,forSubmit,forVal,error,activeId,isDisabled}) {
   return (
@@ -14,7 +14,7 @@ export default function Register_Component({forFields,forChange,forSubmit,forVal
                 onChange={forChange} placeholder={item.placeHolder} value={forVal[item.id]} />
             
               </div>
-            <div className={(error[item.type]&&(activeId==item.id))?"alert alert-danger":"d-none"}>{error[item.type]}</div>
+            <div className={(error[item.type]&&(activeId==item.id))?"alert alert-danger":"d-none"}>{error[item.id]}</div>
             </div>
             )
         })}

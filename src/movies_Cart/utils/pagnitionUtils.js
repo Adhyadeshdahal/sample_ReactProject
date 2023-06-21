@@ -12,7 +12,7 @@ export default function pagnitionUtils(items,noOfItemsInAPage=3,startingIndex=0)
 
   return ({
     noOfPage: noOfPage(),
-    refactoredItems: refactorItems(),
+    refactoredItems: refactorItems().sort((a, b) => a['title'].localeCompare(b['title'])),
 
   }
   )

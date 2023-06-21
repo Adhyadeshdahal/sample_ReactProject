@@ -9,9 +9,9 @@ export default function ComponentCpy(props) {
   <thead>
     <tr>
       <th scope="col">SN</th>
-      <th scope="col">Title</th>
+      <th scope="col" onClick={()=>{props.forSort('title')}}>Title</th>
       <th scope="col">Description</th>
-      <th scope="col">In stocks</th>
+      <th scope="col" onClick={()=>{props.forSort('numberInStock')}}>In stocks</th>
       <th></th>
       <th scope="col"></th>
     </tr>
