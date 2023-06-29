@@ -1,6 +1,6 @@
 import React from 'react'
 
-function AddNewMovieFormComponent({genres,fields,forSubmit,val,forChange,error,activeId,isDisabled,forClick,repeatedMovie}) {
+function AddNewMovieFormComponent({genres,fields,forSubmit,val,forChange,error,activeId,isDisabled,forClick,repeatedMovie,initialValue}) {
   return (
     <>
     <form onSubmit={forSubmit}>
@@ -26,15 +26,15 @@ function AddNewMovieFormComponent({genres,fields,forSubmit,val,forChange,error,a
 
   <div className="form-group">
     <label htmlFor="genre">genre</label>
-    <select className="form-control" id="genre" onChange={forChange}>
+    <select className="form-control" id="genreId" onChange={forChange}>
         {genres.map(obj=>{
             return(
-                <option key={obj._id}>{obj.name}</option>
+                <option key={obj._id} value={obj._id}>{obj.name}</option>
 
             )
         })}
       </select>
-      <div className={(error["genre"]&&(activeId=="genre"))?"alert alert-danger":"d-none"}>{error["genre"]}</div>
+      <div className={(error["genreId"]&&(activeId=="genre"))?"alert alert-danger":"d-none"}>{error["genre"]}</div>
   </div>
   <button type="submit" className="btn btn-warning" disabled={isDisabled}>Add</button>
 
@@ -48,4 +48,4 @@ function AddNewMovieFormComponent({genres,fields,forSubmit,val,forChange,error,a
   )
 }
 
-export default AddNewMovieFormComponent
+export default AddNewMovieFormComponent;

@@ -1,9 +1,10 @@
-import React, {useRef, useState } from 'react';
-import { deleteMovie, getMovie, getMovies } from './services/fakeMovieServices';
+import React, {useEffect, useRef, useState } from 'react';
+// import {getMovie, getMovies } from './services/fakeMovieServices';
+import { ggetMovies,getMovie } from './services/movieService';
 import Pagnition from './components/pagnition';
 import pagnitionUtils from './utils/pagnitionUtils';
 import ComponentCpy from './components/componentcpy';
-import { getGenres } from './services/fakeGenreService';
+import { getGenres } from './services/genreService';
 import ListGroup from './components/listGroup';
 import listgroupUtils from './utils/listgroupUtils';
 import { Heads } from './components/Heads';
@@ -11,10 +12,12 @@ import { useNavigate } from 'react-router-dom';
 
 
 
+
+
 export default function MainMovies() {
     const navigateTo = useNavigate();
-    const [cmovies,setCMovies] = useState(getMovies());
-    const [ogenres,setOGenres]= useState(getGenres());
+    const [cmovies,setCMovies] = useState([]);
+    const [ogenres,setOGenres]= useState([]);
     let noOfItemsPerPage =4;
     const [fromPagnitionUtils,setfromPagnitionUtils] = useState(pagnitionUtils(cmovies,noOfItemsPerPage));
     let [movies,setMovies]=useState(fromPagnitionUtils.refactoredItems);
@@ -35,6 +38,28 @@ export default function MainMovies() {
       setMovies(sortedMovies);
       console.log(sortedMovies);
     }
+
+    useEffect(()=>{
+      async function getValGenres() {
+        const {data:genres}=await getGenres();
+        setOGenres(genres);
+      }
+      async function getValMovies(){
+        const {data}= await ggetMovies();
+        setCMovies(data);
+
+      };
+      getValGenres();
+      getValMovies();
+      
+      
+    },[]);
+
+    useEffect(() => {
+      // Update the movies state when cmovies state changes
+      setMovies(cmovies.filter((item, index) => index < 4));
+    }, [cmovies]);
+
     
 
     function searchMovies() {
@@ -99,15 +124,19 @@ export default function MainMovies() {
     }
     
    const handleDelete=(id)=>{
-    let index = movies.indexOf(getMovie(id));
-    if (index !== -1){
-        let movieTemp = movies.filter(obj => {return obj._id != id})
-        setMovies(movieTemp);
+    let movieTemp = movies;
+        setMovies(movies.filter(obj => {return obj._id != id}));
         setTotalMovies(totalMovies-1)
         handleLike(false);
-        
-
+    async function movieFind(){
+      try{
+        await getMovie(id);
+      }catch(er){
+        setMovies(movieTemp);
+      }
+      
     }
+    movieFind();
    }
 
 

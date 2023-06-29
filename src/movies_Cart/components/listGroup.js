@@ -9,7 +9,7 @@ export default function ListGroup(props) {
   </a>
   {props.genres.map((obj,index)=>{
     return(<a className={obj._id == props.selectGenre?"list-group-item list-group-item-action active":"list-group-item list-group-item-action"} key={obj._id} onClick={()=>{props.forClick(obj._id)}}>
-    {obj.name}
+    {obj.name.toUpperCase()}
   </a>)
   })}
 

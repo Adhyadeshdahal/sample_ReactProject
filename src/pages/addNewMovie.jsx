@@ -1,17 +1,27 @@
 import React, { useContext, useEffect, useState,useRef } from 'react';
 import AddNewMovieFormComponent from '../movies_Cart/components/addNewMovieFormComponent';
-import { getGenres } from '../movies_Cart/services/fakeGenreService';
+import { getGenres } from '../movies_Cart/services/genreService';
+import { saveMovie } from '../movies_Cart/services/movieService';
 import Joi from 'joi';
-import { saveMovie, searchMovie } from '../movies_Cart/services/fakeMovieServices';
+// import { saveMovie, searchMovie } from '../movies_Cart/services/fakeMovieServices';
 import { useNavigate } from 'react-router-dom';
 
 function AddNewMovie() {
   const navigateTo= useNavigate();
   const [activeId,setActiveId]=useState("");
   const [isDisabled,setIsDisabled]=useState(true);
-  const [genres,setGenres]=useState(getGenres());
-  const [errors,setErrors]=useState({title:"",stock:"",rate:"",genre:""});
+  const [genres,setGenres]=useState([]);
+  const [errors,setErrors]=useState({title:"",numberInStock:"",dailyRentalRate:"",genre:""});
   const [doesMovieExist,setDoesMovieExists]=useState(false);
+  useEffect(()=>{
+    async function getVal(){
+      const {data:genre}= await getGenres();
+      setGenres(genre);
+    }
+    getVal();
+
+
+  },[]);
   const [fields,setFields]=useState([
     {
       label:"Title",
@@ -20,30 +30,30 @@ function AddNewMovie() {
       type:"Text"
     },
     {
-      label:"Number In Stock",
-      id:"stock",
+      label:"Number In numberInStock",
+      id:"numberInStock",
       placeholder:"6",
       type:"number"
     },
     {
-      label:"Rate",
-      id:"rate",
+      label:"dailyRentalRate",
+      id:"dailyRentalRate",
       placeholder:"2.5",
       type:"number"
     }
   ]);
   const fieldValues =useRef({
     title:"",
-    stock:"",
-    rate:"",
-    genre:""
+    numberInStock:"",
+    dailyRentalRate:"",
+    genreId:""
   });
   const schema = Joi.object(
     {
         title:Joi.string().required().max(30).min(1).alphanum(),
-        stock:Joi.number().required().min(1),
-        rate:Joi.number().required().min(1).max(11),
-        genre:Joi.string().required()
+        numberInStock:Joi.number().required().min(1),
+        dailyRentalRate:Joi.number().required().min(1).max(11),
+        genreId:Joi.required()
 
     }
     )
@@ -56,9 +66,9 @@ function Validate() {
   const schema = Joi.object(
       {
           title:Joi.string().required().max(30).min(3).regex(/^[a-zA-Z0-9\s]*$/).allow(''),
-          stock:Joi.number().required().min(1),
-          rate:Joi.number().required().min(1).max(11),
-          genre:Joi.string().required()
+          numberInStock:Joi.number().required().min(1),
+          dailyRentalRate:Joi.number().required().min(1).max(11),
+          genreId:Joi.required()
 
       }
       )
@@ -66,7 +76,7 @@ function Validate() {
 
   const {error}= schema.validate(fieldValues.current);
 
-  let err ={title:"",stock:"",rate:"",genre:""};
+  let err ={title:"",numberInStock:"",dailyRentalRate:"",genre:""};
 
   if (error) {
     error.details.forEach(e => {
@@ -74,10 +84,10 @@ function Validate() {
 
       if (e.path[0] === "title") {
         err["title"] = message;
-      } else if (e.path[0] === "stock") {
-        err["stock"] = message;
-      } else if (e.path[0] === "rate") {
-        err["rate"] = message;
+      } else if (e.path[0] === "numberInStock") {
+        err["numberInStock"] = message;
+      } else if (e.path[0] === "dailyRentalRate") {
+        err["dailyRentalRate"] = message;
       }
       else if (e.path[0] === "genre") {
         err["genre"] = message;
@@ -103,7 +113,7 @@ function Validate() {
    if (error){
    setErrors(error)
   }else{
-    setErrors({title:"",stock:"",rate:"",genre:""})
+    setErrors({title:"",numberInStock:"",dailyRentalRate:"",genre:""})
   };
 
    
@@ -120,18 +130,44 @@ const handleSubmit = (event) => {
   if (error) {
     setErrors(error);
   } else {
-    setErrors({ title: "", stock: "", rate: "", genre: "" });
+    setErrors({ title: "", numberInStock: "", dailyRentalRate: "", genre: "" });
 
-    setTimeout(() => {
-      const movieExists = searchMovie(fieldValues.current.title);
+    async function setMovie() {
 
-      setDoesMovieExists(movieExists);
-      if (!movieExists) {
-        saveMovie(fieldValues.current);
-        navigateTo("/");
+      try{
+       await saveMovie({...fieldValues.current});
+       navigateTo("/");
 
+      }catch(err){
+        console.log(err);
       }
-    }, 0);
+
+      
+
+
+      
+    }
+
+    setMovie();
+
+
+
+
+
+
+
+
+
+    // setTimeout(() => {
+    //   const movieExists = searchMovie(fieldValues.current.title);
+
+    //   setDoesMovieExists(movieExists);
+    //   if (!movieExists) {
+    //     saveMovie(fieldValues.current);
+    //     navigateTo("/");
+
+    //   }
+    // }, 0);
   }
 };
 
@@ -140,9 +176,10 @@ const handleSubmit = (event) => {
 
 
   return (
+    
     <AddNewMovieFormComponent genres={genres} fields={fields} error={errors}
     forSubmit={handleSubmit} val={fieldValues} forChange={handleChange} activeId={activeId} isDisabled={isDisabled}
-    forClick={handleClick} repeatedMovie={doesMovieExist}/>
+    forClick={handleClick} repeatedMovie={doesMovieExist} initialValue={fieldValues}/>
   )
 }
 
