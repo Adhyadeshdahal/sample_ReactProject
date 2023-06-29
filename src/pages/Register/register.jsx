@@ -1,8 +1,14 @@
-import React,{useEffect, useState,useRef} from 'react'
+import React,{useEffect, useState,useRef} from 'react';
 import Register_Component from './register_component';
 import Joi from 'joi';
+import { saveUser } from '../../services/registerUser';
+import { useNavigate } from 'react-router-dom';
+import { ToastContainer, toast } from 'react-toastify';
+
 
 function Register() {
+
+  const navigateTo = useNavigate();
     const [labels,setLabels]=useState([{
         id:"email",
         type:"email",
@@ -15,7 +21,7 @@ function Register() {
         label:"Password"
       },
       {
-        id:"username",
+        id:"name",
         type:"username",
         placeHolder:"Enter your username",
         label:"UserName"
@@ -23,18 +29,31 @@ function Register() {
 
       const [isDisabled,setIsDisabled]=useState(true);
 
-      const [errors,setErrors]=useState({email:"",password:"",username:""})
+      const [errors,setErrors]=useState({email:"",password:"",name:""})
       // const errors = useRef({email:"",password:"",username:""})
 
-      const registerValues = useRef({email:"",password:"",username:""});
+      const registerValues = useRef({email:"",password:"",name:""});
 
       const [activeId,setActiveId]=useState("");
+
+      useEffect(()=>{
+
+
+        if(errors.email ===""&&errors.password===""&&errors.name===""){
+          setIsDisabled(false);
+        }else{
+          setIsDisabled(true);
+        }
+
+
+
+      },[errors])
 
 
 
       function Validate() {
         const schema = Joi.object({
-          username: Joi.string().required().max(16).min(3).alphanum(),
+          name: Joi.string().required().max(16).min(3).alphanum(),
           password: Joi.string().min(8).max(32).alphanum().required().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')),
           email: Joi.string().min(3).max(30).required().email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
         }).options({ abortEarly: false });
@@ -43,7 +62,7 @@ function Register() {
         let err = {
           email: "",
           password: "",
-          username: ""
+          name: ""
         };
         
         if (error) {
@@ -52,8 +71,8 @@ function Register() {
       
             if (e.path[0] === "email") {
               err["email"] = message;
-            } else if (e.path[0] === "username") {
-              err["username"] = message;
+            } else if (e.path[0] === "name") {
+              err["name"] = message;
             } else if (e.path[0] === "password") {
               err["password"] = message;
             }
@@ -80,8 +99,36 @@ function Register() {
       }
 
       function handleSubmit(event) {
+        
+        
         event.preventDefault();
-        Validate();
+        setErrors(Validate());
+        async function postVal() {
+          try{
+            const {data:result} = await saveUser(registerValues.current);
+            console.log(result);
+            navigateTo("/");
+          
+          }catch(err){
+
+              if (err.response.status === 400&&err.response){
+              let error = {...errors};
+              error['email']=err.response.data;
+              toast.dark(error.email);
+              setErrors(error);
+              
+              console.log(err.response.data,err,error);
+
+              }
+              
+
+
+            }
+          
+          
+        }
+
+        postVal();
 
       }
 
@@ -89,6 +136,7 @@ function Register() {
 
   return (
    <>
+   <ToastContainer/>
    <Register_Component forFields={labels} forChange={handleChange} forSubmit={handleSubmit} 
    forVal={registerValues} error={errors} activeId={activeId} isDisabled={isDisabled}/>
    
