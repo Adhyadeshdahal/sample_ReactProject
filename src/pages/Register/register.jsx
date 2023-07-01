@@ -105,9 +105,11 @@ function Register() {
         setErrors(Validate());
         async function postVal() {
           try{
-            const {data:result} = await saveUser(registerValues.current);
-            console.log(result);
-            navigateTo("/");
+            const {data:result,headers} = await saveUser(registerValues.current);
+            localStorage.removeItem('token');
+            localStorage.setItem('token',headers['x-auth-token']);
+
+            window.location.href= "/";
           
           }catch(err){
 
@@ -116,8 +118,6 @@ function Register() {
               error['email']=err.response.data;
               toast.dark(error.email);
               setErrors(error);
-              
-              console.log(err.response.data,err,error);
 
               }
               

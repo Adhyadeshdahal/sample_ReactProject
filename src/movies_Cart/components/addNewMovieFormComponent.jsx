@@ -1,6 +1,6 @@
 import React from 'react'
 
-function AddNewMovieFormComponent({genres,fields,forSubmit,val,forChange,error,activeId,isDisabled,forClick,repeatedMovie,initialValue}) {
+function AddNewMovieFormComponent({genres,fields,forSubmit,val,forChange,error,activeId,isDisabled,forClick,repeatedMovie}) {
   return (
     <>
     <form onSubmit={forSubmit}>

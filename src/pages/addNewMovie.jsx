@@ -4,7 +4,8 @@ import { getGenres } from '../movies_Cart/services/genreService';
 import { saveMovie } from '../movies_Cart/services/movieService';
 import Joi from 'joi';
 // import { saveMovie, searchMovie } from '../movies_Cart/services/fakeMovieServices';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate ,useLocation, useSearchParams} from 'react-router-dom';
+import { userContext } from '../App';
 
 function AddNewMovie() {
   const navigateTo= useNavigate();
@@ -13,6 +14,22 @@ function AddNewMovie() {
   const [genres,setGenres]=useState([]);
   const [errors,setErrors]=useState({title:"",numberInStock:"",dailyRentalRate:"",genre:""});
   const [doesMovieExist,setDoesMovieExists]=useState(false);
+  const objjs = useSearchParams();
+  const location= useLocation();
+  const value = useContext(userContext);
+
+  useEffect(()=>{
+    if(!value._id){
+      navigateTo("/Login");
+    }
+    
+
+  });
+
+
+
+
+
   useEffect(()=>{
     async function getVal(){
       const {data:genre}= await getGenres();

@@ -17,7 +17,7 @@ function Main({navItems,logo}) {
 
             {sNavItems.map((item=>{
                 return (
-                <Items name={item} key={item}/>
+                <Items item={item} key={item.name}/>
                 )
             }))}
         </div>

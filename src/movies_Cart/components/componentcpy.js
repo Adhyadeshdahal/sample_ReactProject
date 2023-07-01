@@ -1,8 +1,10 @@
-import React from 'react'
+import React, { useContext } from 'react'
 import LikeComponent from './likeComponent'
 import { Link } from 'react-router-dom'
+import { userContext } from '../../App'
 
 export default function ComponentCpy(props) {
+  const value = useContext(userContext);
   return (
     <>
     <table className="table">
@@ -26,10 +28,10 @@ export default function ComponentCpy(props) {
             <td>{obj.genre.name}</td>
             <td>{obj.numberInStock}</td>
             <td><LikeComponent onLiked={props.onLiked} id={obj._id} key={obj._id}/></td>
-            <td><button className='btn btn-danger'
+            {(value._id && value.isAdmin)&&<td><button className='btn btn-danger'
              onClick={()=>{
                 props.handleClick(obj._id)
-            }}>Delete</button></td>
+            }}>Delete</button></td>}
             
     </tr>
     )

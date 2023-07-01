@@ -1,6 +1,7 @@
-import React, {useEffect, useRef, useState } from 'react';
+import React, {useEffect, useRef, useState,useContext } from 'react';
+import { userContext } from '../App';
 // import {getMovie, getMovies } from './services/fakeMovieServices';
-import { ggetMovies,getMovie } from './services/movieService';
+import { ggetMovies,getMovie, deleteMovie } from './services/movieService';
 import Pagnition from './components/pagnition';
 import pagnitionUtils from './utils/pagnitionUtils';
 import ComponentCpy from './components/componentcpy';
@@ -14,7 +15,8 @@ import { useNavigate } from 'react-router-dom';
 
 
 
-export default function MainMovies() {
+export default function MainMovies(props) {
+    const UserValue = useContext(userContext);
     const navigateTo = useNavigate();
     const [cmovies,setCMovies] = useState([]);
     const [ogenres,setOGenres]= useState([]);
@@ -130,7 +132,7 @@ export default function MainMovies() {
         handleLike(false);
     async function movieFind(){
       try{
-        await getMovie(id);
+        await deleteMovie(id);
       }catch(er){
         setMovies(movieTemp);
       }
@@ -159,7 +161,7 @@ export default function MainMovies() {
   <div className='w-75 m-3'>
     <ComponentCpy onLiked={handleLike} handleClick={handleDelete} movies={movies} forSort ={sortMovies}/>
 
-    <button className='btn btn-primary' onClick={()=>{navigateTo("/addNewMovie")}}>New Movie</button>
+    {UserValue._id&&<button className='btn btn-primary' onClick={()=>{navigateTo("/addNewMovie")}}>New Movie</button>}
     
     
 

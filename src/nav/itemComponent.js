@@ -4,10 +4,10 @@ import "./app.css";
 import { NavLink } from 'react-router-dom';
 // import PropTypes from 'prop-types';
 
-function Items({name}) {
+function Items({item}) {
     return (
-        <NavLink to={name=="movies"?"/":name} className='item' style={{textDecoration: 'none'}}>
-            {name}
+        <NavLink to={item.path} className='item' style={{textDecoration: 'none'}}>
+            {item.name}
         </NavLink> 
     
      );

@@ -1,7 +1,7 @@
 import axios from "axios";
-const url = "http://localhost:3900/api/genres";
+import { genreUrl } from "../../config/config";
 
-
+axios.defaults.headers.common['x-auth-token']=localStorage.getItem('token');
 export function getGenres() {
-return axios.get(url);
+return axios.get(genreUrl);
 }

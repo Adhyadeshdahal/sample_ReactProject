@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { createContext, useContext } from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import {App} from './App';
 import { BrowserRouter } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.css';
 // Put any other imports below so that CSS from your
@@ -8,9 +8,11 @@ import 'bootstrap/dist/css/bootstrap.css';
 
 
 export default function Index() {
+
+
   return (
     <div>
-
+       
       <App/>
 
 

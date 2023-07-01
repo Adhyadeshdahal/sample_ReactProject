@@ -17,7 +17,7 @@ function MoviesPage() {
   });
   const [activeId, setActiveId] = useState("");
 
-  const fieldValues = useRef({_id:"",
+  const fieldValues = useRef({
     title: "",
     numberInStock: "",
     dailyRentalRate: "",
@@ -114,7 +114,6 @@ function MoviesPage() {
         type: "number"
       }
     ],
-    initialValue: initialValue,
     genres: movie.genre ? [movie.genre] : [{ _id: "", name: "" }],
     forSubmit: handleSubmit,
     val: fieldValues.current,
