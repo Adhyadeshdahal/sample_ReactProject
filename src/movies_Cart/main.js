@@ -26,7 +26,7 @@ export default function MainMovies(props) {
     let [wishList,setWish]=useState(0);
     let [currentPage,setCurrentPage]=useState(1);
     let [totalMovies,setTotalMovies]=useState(cmovies.length);
-    let [selectedGenre,setSelectedGenre]=useState(null);
+    let [selectedGenre,setSelectedGenre]=useState(" ");
     const searchedValue = useRef("");
 
     function sortMovies(type) {
@@ -158,14 +158,14 @@ export default function MainMovies(props) {
     <ListGroup genres={ogenres} forClick={handleListGroupClick} selectGenre={selectedGenre}/>
 </div>
 <br/>
-  <div className='w-75 m-3'>
+{selectedGenre!==" "?( <div className='w-75 m-3'>
     <ComponentCpy onLiked={handleLike} handleClick={handleDelete} movies={movies} forSort ={sortMovies}/>
 
     {UserValue._id&&<button className='btn btn-primary' onClick={()=>{navigateTo("/addNewMovie")}}>New Movie</button>}
     
     
 
-  </div>
+  </div>):<h1>Please select Genre</h1>}
    </div>
     
   <div id="pagnition" className="">
